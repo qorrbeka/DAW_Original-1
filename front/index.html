@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  
+  <style>
+		body {
+  			background-image: url('start.jpg');
+  			background-repeat: no-repeat;
+  			background-size: 100%;
+  			height: 200px;
+  			width: 50%;
+            margin: 0;
+            overflow: hidden;
+		}
+		button {
+			border: none;
+			appearance: none;
+			cursor: pointer;
+			background-color: inherit;
+			position: absolute;
+			top: 55%;
+			left: 60%;
+			transform: translateY(-50%);
+			transform: translateX(-50%);
+		}
+	  	form {
+	  		position: absolute;
+			top: 53%;
+			left: 61%;
+	  	}
+        button2 {
+          border: none;
+          appearance: none;
+          cursor: pointer;
+          background-color: inherit;
+          
+          position: absolute;
+          top: 45%;
+          left: 50%;
+          transform: translateY(-50%);
+          transform: translateX(-50%);
+         }
+	</style>
+  
+  <title>DAW</title>
+</head>
+
+<!-- 프로그램 화면을 위한 핵심 HTML 시작 -->
+<body>
+    <form action="main.html">
+        <label for="stid">학번</label>
+        <input type="text" id="stid" name="stid"><br>
+        <label for="name">이름</label>
+        <input type="text" id="name" name="name"><br>
+        <input type="image" src="start-button.png" width="100" height="50" border="0">
+        
+    </form>
+	
+        
+		<button2 onclick="openPopup()">
+            <input type="image" src="tutorial-button.png" width="100" height="50" border="0">
+        </button2>
+        
+		<script>
+            function openPopup() {
+                
+                const popup = window.open('about:blank', 'Tutorial', 'width=900,height=500');
+
+                // 팝업 창이 제대로 열렸는지 확인합니다.
+                if (popup) {
+                    // 팝업 창의 document 객체를 사용하여 내용을 설정합니다.
+
+                    popup.document.write('<html><head><title>Tutorial</title></head><body>');
+                    popup.document.write('<h1>DAW 튜토리얼</h1>');
+                    popup.document.write('<p>0. 이름과 학번을 먼저 기입해 주세요.<br>1. 음표/쉼표는 우클릭을 이용해 기입합니다.<br>2. 음표는 우클릭해서 다양한 조표를 기입할 수 있습니다.<br>3. 재생버튼과 정지버튼으로 곡을 재생해보고 정지할 수 있습니다.<br>4. 저장버튼을 누르면 이름과 학번으로 파일이 저장됩니다.<br>5. 불러오기를 누르면 파일에 있는 미디파일을 불러옵니다.<br>6. 음표위에 중첩하여 화음을 형성할 수 있습니다.<br>7. F5를 눌러 초기화할 수 있습니다.</p>');
+                    popup.document.write('</body></html>');
+                    popup.document.body.style.backgroundColor = 'black';
+                    popup.document.body.style.color = 'white';
+                    popup.document.close(); // 문서 작성 완료
+
+                    // 팝업 창이 닫힐 때 실행할 코드를 추가할 수 있습니다.
+                    // popup.onbeforeunload = function() {
+                    //     // 팝업 창이 닫힐 때 실행할 코드를 여기에 작성합니다.
+                    // };
+                } else {
+                    alert('팝업 창이 차단되었습니다. 팝업 차단기를 해제하세요.');
+                }
+            }</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <title>DAW</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.min.css" integrity="sha256-ff4Vuur4aYrm0ZOAEC/me1LBOcid7PJ5oP9xxvJ0AKQ=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+  <!-- 웹폰트 스타일 시트 -->
+  <link href="https://fonts.googleapis.com/css?family=Do+Hyeon|Jua&display=swap" rel="stylesheet">
+  <!-- 커스텀 스타일 시트 -->
+  <link href="./main.css" rel="stylesheet">
+
+    <script>
+        const urlParams = new URL(location.href).searchParams;
+
+        const stid = urlParams.get('stid');
+        console.log("학번:"+stid);
+        const name = urlParams.get('name');
+        console.log("이름:"+name);
+    </script>
+</head>
+
+<!-- Python 과 JavaScript간 연동을 위한 Python Eel 라이브러리 -->
+<script type="text/javascript" src="/eel.js"></script>
+
+<!-- 프로그램 화면을 위한 핵심 HTML 시작 -->
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header class="masthead mb-auto">
+    <div class="inner">
+        <script>
+            document.write('<h1>' + stid + name + '</h1>');
+            eel.save_filename(stid+name);
+        </script>
+    </div>
+  </header>
+
+  <main role="main" class="inner cover">
+
+    <div class="row justify-content-md-center">
+      <!-- 실제 악보가 렌더링 되는 영역 -->
+      <div id="vex-container"></div>
+    </div>
+
+    <div class="row justify-content-md-center">
+    </div>
+
+  </main>
+
+  <footer class="mastfoot mt-auto">
+  </footer>
+</div>
+<!-- 프로그램 화면을 위한 핵심 HTML 끝 -->
+
+<!-- 자바스크립트 라이브러리들 -->
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!-- 아이콘 사용을 위한 Font Awesome 라이브러리 -->
+<script src="https://kit.fontawesome.com/6d916a8a31.js"></script>
+
+<!-- 오선지 및 음표를 렌더링 하기 위한 VexFlow 라이브러리 VexFlow 라이브러리와 부수 플러그인 -->
+  <script type="text/javascript" src="./vexui/lib/vexflow-debug.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/midi.js/0.3.0/midi.js"></script>
+	<script type="text/javascript" src="./vexui/lib/Base64.js"></script>
+	<script type="text/javascript" src="./vexui/lib/base64binary.js"></script>
+  <script type="text/javascript" src="./vexui/src/UI.js"></script>
+	<script type="text/javascript" src="./vexui/src/Util.js"></script>
+	<script type="text/javascript" src="./vexui/src/Handler.js"></script>
+	<script type="text/javascript" src="./vexui/src/MouseListener.js"></script>
+	<script type="text/javascript" src="./vexui/src/NoteMap.js"></script>
+	<script type="text/javascript" src="./vexui/src/VexFlowExtension.js"></script>
+	<script type="text/javascript" src="./vexui/src/Constants.js"></script>
+	<script type="text/javascript" src="./vexui/src/KeyboardListener.js"></script>
+	<script type="text/javascript" src="./vexui/src/NoteMenu.js"></script>
+	<script type="text/javascript" src="./vexui/src/Button.js"></script>
+	<script type="text/javascript" src="./vexui/src/NoteMenuButtonRenderer.js"></script>
+	<script type="text/javascript" src="./vexui/src/Toolbar.js"></script>
+	<script type="text/javascript" src="./vexui/src/TipRenderer.js"></script>
+	<script type="text/javascript" src="./vexui/src/Player.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="./vexui/css/VexUI.css">
+
+<!-- 화면을 동작하게 만들기위해 필수적인 자바스크립트 코드들 -->
+<script type="text/javascript">
+  $(function () {
+    // 곡을 저장 중인지 나타내는 플래그
+    let saving = false;
+
+    // VexFlow 기능 중 악보랑 상호작용하는 부분을 상황에 상황에 맞게 패치
+    Vex.UI.Player.prototype.fireEvent = function(event) {
+      // console.log(event);
+      switch(event.subtype){
+        case 'noteOn':
+          eel.note_on(event.noteNumber, event.velocity, 2 / Number(event.note.duration));  // daw.py의 note_on 함수를 호출합니다
+          // eel.save_note_on(event.noteNumber);
+          event.note.setHighlight(true);
+          this.handler.redraw();
+          break;
+        case 'noteOff':
+          if (!saving) {
+            // Midi Note 재생을 종료하는 이벤트가 발생할 때 호출됩니다.
+            eel.note_off(event.noteNumber);  // daw.py의 note_off 함수를 호출합니다
+          } else {
+            eel.save_note_off(event.noteNumber);
+          }
+          event.note.setHighlight(false);
+          this.handler.redraw();
+          break;
+        case 'chordOn':
+          if (!saving) {
+            // 화음을 재생하는 이벤트가 발생할 때 호출됩니다.
+            eel.chord_on(event.noteNumber, event.velocity, 2 / Number(event.note.duration));  // daw.py의 chord_on 함수를 호출합니다
+          } else {
+            eel.save_chord_on(event.noteNumber, event.velocity, 2 / Number(event.note.duration));
+          }
+          event.note.setHighlight(true);
+          this.handler.redraw();
+          break;
+        case 'chordOff':
+          if (!saving) {
+            // 화음을 재생을 종료하는 이벤트가 발생할 때 호출됩니다.
+            eel.chord_off(event.noteNumber);  // daw.py의 chord_off 함수를 호출합니다
+          } else {
+            eel.save_chord_off(event.noteNumber);
+          }
+          event.note.setHighlight(false);
+          this.handler.redraw();
+          break;
+      }
+    };
+
+    // VexFlow 인스턴스를 초기화 하여, 화면에 악보를 그립니다.
+    const handler = new Vex.UI.Handler("vex-container", {
+      numberOfStaves: 4,
+      canvasProperties: {
+        id: "vex-container_canvas",
+        width: 625,
+        height: 550,
+        tabindex: 1
+      }
+    }).init();
+
+    $('#save_sheet').click(function () {
+      saving = true;
+      handler.play(function () {
+        saving = false;
+      });
+    });
+  });
+</script>
+</body>
+</html>
